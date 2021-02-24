@@ -1,69 +1,88 @@
 ﻿using Business.Abstract;
+using Core.Business.EntityFrameworkBusiness;
+using Core.Constants;
+using Core.Entities;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Business.Concrete
 {
-    public class CarManager : ICarService
+    public class CarManager<T,TDal> : EfBusinessServiceBase<Car,T>,ICarService
+        where T : class, IDal<Car>, new()
+        where TDal : class, ICarDal, new()
     {
-        ICarDal _carDal;
+        TDal dal;
 
-        public CarManager(ICarDal carDal)
+        public CarManager()
         {
-            _carDal = carDal;
+            this.dal = new TDal();
         }
 
-        public string Add(Car car)
+        public override IResult Add(Car entity)
+        {
+            if (entity.Description.Length <= 2)
+            {
+                return new ErrorResult("Araba Ekleme İşlemi Başarısız. Araba Tanımı En Az 3 Karakter Olmalıdır.");
+            }
+            if (entity.DailyPrice < 1)
+            {
+                return new ErrorResult("Araba Ekleme İşlemi Başarısız. Arabanın Günlük Kiralama Bedeli En Az 1 Olmalıdır.");
+            }
+            return base.Add(entity);
+        }
+
+        public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
             try
             {
-                _carDal.Add(car);
-                return "Araba Ekleme İşlemi Başarılı. Toplam Araba Sayısı: " + _carDal.GetAll().Count.ToString();
+                return new SuccessDataResult<List<CarDetailDto>>(Messages.GetEntityListedSuccess,dal.GetCarDetails());
             }
-            catch (Exception e)
+            catch (Exception err)
             {
-                return "Bir Hata oluştu: " + e.Message.ToString();
+                return new ErrorDataResult<List<CarDetailDto>>(Messages.GetEntityListedError(err.Message));
             }
         }
 
-        public string Delete(Car car)
+        public IDataResult<List<Car>> GetCarsByBrandId(int brandId)
         {
             try
             {
-                _carDal.Delete(car);
-                return "Araba Silme İşlemi Başarılı. Toplam Araba Sayısı: " + _carDal.GetAll().Count.ToString();
+                return new SuccessDataResult<List<Car>>(base.service.GetAll(c => c.BrandId == brandId));
             }
-            catch (Exception e)
+            catch (Exception err)
             {
-                return "Bir Hata oluştu: " + e.Message.ToString();
+                return new ErrorDataResult<List<Car>>(Messages.GetEntityListedError(err.Message));
             }
         }
 
-        public List<Car> GetAll()
+        public IDataResult<List<Car>> GetCarsByColorId(int colorId)
         {
-            return _carDal.GetAll();
-        }
-
-        public Car GetById(int carId)
-        {
-            return _carDal.GetById(carId);
-        }
-
-        public string Update(Car car)
-        {
-
             try
             {
-                _carDal.Update(car);
-                return "Araba Güncelleme İşlemi Başarılı. Toplam Araba Sayısı: " + _carDal.GetAll().Count.ToString();
+                return new SuccessDataResult<List<Car>>(base.service.GetAll(c => c.ColorId == colorId));
             }
-            catch (Exception e)
+            catch (Exception err)
             {
-                return "Bir Hata oluştu: " + e.Message.ToString();
+                return new ErrorDataResult<List<Car>>(Messages.GetEntityListedError(err.Message));
             }
+        }
+
+        public override IResult Update(Car entity)
+        {
+            if (entity.Description.Length <= 2)
+            {
+                return new ErrorResult("Araba Güncelleme İşlemi Başarısız. Araba Tanımı En Az 3 Karakter Olmalıdır.");
+            }
+            if (entity.DailyPrice < 1)
+            {
+                return new ErrorResult("Araba Güncelleme İşlemi Başarısız. Arabanın Günlük Kiralama Bedeli En Az 1 Olmalıdır.");
+            }
+            return base.Update(entity);
         }
     }
 }

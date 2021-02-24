@@ -2,8 +2,9 @@
 using Business.Abstract;
 using Business.Concrete;
 using DataAccess.Concrete;
-using DataAccess.Concrete.InMemory;
+using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
+using Entities.Dtos;
 
 namespace ConsoleApp
 {
@@ -11,34 +12,17 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
-            ICarService carService = new CarManager(new InMemoryCarDal());
-            Console.WriteLine("Araç Kiralama Sistemine Hoşgeldiniz.\nBir İşlem Seçiniz.");
-            Console.WriteLine("1.Araçları Listele\n2.Araç Ekle\n3.Araç Sil\n4.Araç Güncelle\n5.Çıkış");
-            int choosing = int.Parse(Console.ReadLine());
-            while (choosing != 5)
-            {
-                if (choosing == 1)
-                {
-                    foreach (Car car in carService.GetAll())
-                    {
-                        Console.WriteLine("Araba İsmi: " + car.Description + " " +car.DailyPrice.ToString() + "\n");     
-
-                    }
-                }
-                if (choosing == 2)
-                {
-                    Console.WriteLine("Araç Tanımı: ");
-                    string description = Console.ReadLine();
-                    Console.WriteLine("Araç Modeli: ");
-                    string modelYear = Console.ReadLine();
-                    Console.WriteLine("Günlük Kiralama Bedeli: ");
-                    double dailyPrice = double.Parse(Console.ReadLine());
-                    Console.WriteLine(carService.Add(new Car {Description=description,ModelYear=modelYear,DailyPrice=dailyPrice }));
-                }
-
-                Console.WriteLine("\n1.Araçları Listele\n2.Araç Ekle\n3.Araç Sil\n4.Araç Güncelle\n5.Çıkış");
-                choosing = int.Parse(Console.ReadLine());
-            }
+            ICarService carService = new CarManager<EfCarDal, EfCarDal>();
+            IColorService colorService = new ColorManager<EfColorDal>();
+            IBrandService brandService = new BrandManager<EfBrandDal>();
+            IUserService userService = new UserManager<EfUserDal>();
+            ICustomerService customerService = new CustomerManager<EfCustomerDal>();
+            IRentalService rentalService = new RentalManager<EfRentalDal>();
+            //Console.WriteLine("Kullanıcı Ekleniyor..");
+            //Console.WriteLine(userService.Add(new User() { Email="Deneme@gmail.com",FirstName="Deneme", LastName="Test", Password="123456"}).Message);
+            //Console.WriteLine("Müşteri Ekleniyor..");
+            //Console.WriteLine(customerService.Add(new Customer() { UserId=1}).Message);
+            Console.WriteLine(rentalService.Add(new Rental() { }).Message);
         }
     }
 }

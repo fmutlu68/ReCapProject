@@ -1,4 +1,4 @@
-﻿using Entities.Abstract;
+﻿using Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,8 +15,10 @@ namespace Entities.Concrete
 
         public string ModelYear { get; set; } // Arabanın Modeli
 
-        public double DailyPrice { get; set; } // Günlük Kiralama Bedeli
+        public decimal DailyPrice { get; set; } // Günlük Kiralama Bedeli
 
         public string Description { get; set; }
+
+        public override string ToString() => "Araba";
     }
 }

@@ -1,16 +1,17 @@
-﻿using Entities.Concrete;
+﻿using Core.Business;
+using Core.Utilities.Results;
+using Entities.Concrete;
+using Entities.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Business.Abstract
 {
-    public interface ICarService
+    public interface ICarService : IBusinessService<Car>
     {
-        List<Car> GetAll();
-        string Add(Car car); // Ekledikten Sonra Bir Mesaj Döndürecek
-        string Delete(Car car); //Silindikten Sonra Bir Mesaj Döndürecek
-        string Update(Car car); //Güncellendikten Sonra Bir Mesaj Döndürecek
-        Car GetById(int carId); 
+        IDataResult<List<Car>> GetCarsByBrandId(int brandId);
+        IDataResult<List<Car>> GetCarsByColorId(int colorId);
+        IDataResult<List<CarDetailDto>> GetCarDetails();
     }
 }
