@@ -68,7 +68,8 @@ namespace Core.Business.EntityFrameworkBusiness
         {
             try
             {
-                return new SuccessDataResult<TEntity>(Messages.GetEntitySuccess(entityName), service.Get(e => e.Id == id)); 
+                var result = service.Get(e => e.Id == id);
+                return new SuccessDataResult<TEntity>(Messages.GetEntitySuccess(entityName),result); 
             }
             catch (Exception err)
             {
