@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
+using Business.ValidationRules.FluentValidation;
 using Core.Business.EntityFrameworkBusiness;
+using Core.CrossCuttingConcerns.Validation;
 using Core.Entities;
 using Core.Utilities.Results;
 using Entities.Concrete;
@@ -14,11 +16,13 @@ namespace Business.Concrete
     {
         public override IResult Add(Rental entity)
         {
-            if (entity.RentDate == DateTime.MinValue)
-            {
-                return new ErrorResult("Bir Kiralama İşleminin Yapılabilmesi İçin Kiralama Tarihinin Girilmesi Gerekmektedir.");
-            }
-            return base.Add(entity);
+            var result = ValidationTool.Validate(new RentalValidator(), entity);
+            return result == null ? base.Add(entity) : result;
+        }
+        public override IResult Update(Rental entity)
+        {
+            var result = ValidationTool.Validate(new RentalValidator(), entity);
+            return result == null ? base.Update(entity) : result;
         }
     }
 }

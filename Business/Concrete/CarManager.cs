@@ -1,11 +1,14 @@
 ﻿using Business.Abstract;
+using Business.ValidationRules.FluentValidation;
 using Core.Business.EntityFrameworkBusiness;
 using Core.Constants;
+using Core.CrossCuttingConcerns.Validation;
 using Core.Entities;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dtos;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,15 +28,8 @@ namespace Business.Concrete
 
         public override IResult Add(Car entity)
         {
-            if (entity.Description.Length <= 2)
-            {
-                return new ErrorResult("Araba Ekleme İşlemi Başarısız. Araba Tanımı En Az 3 Karakter Olmalıdır.");
-            }
-            if (entity.DailyPrice < 1)
-            {
-                return new ErrorResult("Araba Ekleme İşlemi Başarısız. Arabanın Günlük Kiralama Bedeli En Az 1 Olmalıdır.");
-            }
-            return base.Add(entity);
+            var result = ValidationTool.Validate(new CarValidator(),entity);
+            return result == null ? base.Add(entity) : result;
         }
 
         public IDataResult<List<CarDetailDto>> GetCarDetails()
@@ -74,15 +70,8 @@ namespace Business.Concrete
 
         public override IResult Update(Car entity)
         {
-            if (entity.Description.Length <= 2)
-            {
-                return new ErrorResult("Araba Güncelleme İşlemi Başarısız. Araba Tanımı En Az 3 Karakter Olmalıdır.");
-            }
-            if (entity.DailyPrice < 1)
-            {
-                return new ErrorResult("Araba Güncelleme İşlemi Başarısız. Arabanın Günlük Kiralama Bedeli En Az 1 Olmalıdır.");
-            }
-            return base.Update(entity);
+            var result = ValidationTool.Validate(new CarValidator(), entity);
+            return result == null ? base.Update(entity) : result;
         }
     }
 }
