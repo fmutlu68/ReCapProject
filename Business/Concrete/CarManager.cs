@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Business.EntityFrameworkBusiness;
 using Core.Constants;
 using Core.CrossCuttingConcerns.Validation;
@@ -26,6 +27,7 @@ namespace Business.Concrete
             this.dal = new TDal();
         }
 
+        [ValidationAspect(typeof(CarValidator))]
         public override IResult Add(Car entity)
         {
             var result = ValidationTool.Validate(new CarValidator(),entity);

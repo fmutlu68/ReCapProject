@@ -14,17 +14,18 @@ namespace Core.CrossCuttingConcerns.Validation
             var result = validator.Validate(context);
             if (!result.IsValid)
             {
-                string ErrorMessage = "";
-                foreach (var Error in result.Errors)
-                {
-                    if (Error == result.Errors[result.Errors.Count - 1])
-                    {
-                        ErrorMessage += string.Format("{0} --- {1} {2}", Error.PropertyName, Error.ErrorCode, Error.ErrorMessage);
-                        continue;
-                    }
-                    ErrorMessage += string.Format("{0} --- {1} {2}   ", Error.PropertyName, Error.ErrorCode, Error.ErrorMessage);
-                }
-                return new ErrorResult(ErrorMessage);
+                //string ErrorMessage = "";
+                //foreach (var Error in result.Errors)
+                //{
+                //    if (Error == result.Errors[result.Errors.Count - 1])
+                //    {
+                //        ErrorMessage += string.Format("{0} --- {1} {2}", Error.PropertyName, Error.ErrorCode, Error.ErrorMessage);
+                //        continue;
+                //    }
+                //    ErrorMessage += string.Format("{0} --- {1} {2}   ", Error.PropertyName, Error.ErrorCode, Error.ErrorMessage);
+                //}
+                //return new ErrorResult(ErrorMessage);
+                throw new ValidationException(result.Errors);
             }
             return null;
         }
