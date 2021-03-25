@@ -17,10 +17,10 @@ namespace Business.Concrete
     public class CarImageManager<TDal> : EfBusinessServiceBase<CarImage, TDal>, ICarImageService
         where TDal : class, IDal<CarImage>, new()
     {
-        public IDataResult<List<CarImage>> GetAllImagesByCarId(int categoryId)
+        public IDataResult<List<CarImage>> GetAllImagesByCarId(int carId)
         {
-            IDataResult<List<CarImage>> images = new SuccessDataResult<List<CarImage>>();
-            return images;
+            List<CarImage> images = base.service.GetAll(img=>img.CarId == carId);
+            return new SuccessDataResult<List<CarImage>>("Resimler Listelendi.",images);
         }
         public IResult AddImage(CarImage carImage, IFormFile file)
         {
@@ -33,14 +33,17 @@ namespace Business.Concrete
             carImage.ImagePath = FileHelper.Add(file);
             carImage.Date = DateTime.Now;
 
-            base.service.Add(carImage);
-            return new SuccessResult("");
+            return base.Add(carImage);
         }
-        public IResult DeleteImage(CarImage carImage)
+        public IResult DeleteImage(int id)
         {
-            IResult result = FileHelper.Delete(carImage.ImagePath);
-            base.service.Delete(carImage);
-            return new SuccessResult();
+            CarImage willDeletedImage = base.service.Get(img=>img.Id == id);
+            IResult result = FileHelper.Delete(willDeletedImage.ImagePath);
+            if (result.Success == false)
+            {
+                return result;
+            }
+            return base.Delete(willDeletedImage);
         }
         public IResult UpdateImage(CarImage carImage, IFormFile file)
         {
@@ -56,30 +59,7 @@ namespace Business.Concrete
             carImage.ImagePath = FileHelper.Update(oldPath, file);
             carImage.Date = DateTime.Now;
 
-            base.service.Update(carImage);
-            return new SuccessResult();
-        }
-        public IDataResult<List<CarImage>> CheckIfCarImageNull(int id)
-        {
-            try
-            {
-                string path = @"\Images\defaultimage.jpg";
-                var result = base.service.GetAll(c => c.CarId == id).Count > 0 ? true : false;
-                if (!result)
-                {
-                    List<CarImage> carImage = new List<CarImage>();
-                    carImage.Add(new CarImage { CarId = id, ImagePath = path, Date = DateTime.Now });
-                    return new SuccessDataResult<List<CarImage>>(carImage);
-
-                }
-            }
-            catch (Exception exception)
-            {
-
-                return new ErrorDataResult<List<CarImage>>(exception.Message);
-            }
-
-            return new SuccessDataResult<List<CarImage>>(base.service.GetAll(c => c.CarId == id));
+            return base.Update(carImage);
         }
 
         private IResult CheckIfImagesLimitWasExceded(int id)

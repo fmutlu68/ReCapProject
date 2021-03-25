@@ -55,7 +55,7 @@ namespace Core.Utilities.Helpers
         {
             try
             {
-                File.Delete(path);
+                File.Delete(Environment.CurrentDirectory + @"\\wwwroot" + path);
             }
             catch (Exception exception)
             {
@@ -72,11 +72,11 @@ namespace Core.Utilities.Helpers
             var newPath = Guid.NewGuid() + fileExtension;
 
 
-            string path = Environment.CurrentDirectory + @"\wwwroot\Images";
+            string path = Environment.CurrentDirectory + @"\wwwroot\Uploads\Images";
 
             string result = $@"{path}\{newPath}";
 
-            return (result, $"\\Images\\{newPath}");
+            return (result, $"\\Uploads\\Images\\{newPath}");
         }
     }
 }

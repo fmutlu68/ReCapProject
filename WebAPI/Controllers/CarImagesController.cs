@@ -21,7 +21,7 @@ namespace WebAPI.Controllers
             _carImageService = carImageService;
         }
 
-        [HttpPost("getall")]
+        [HttpGet("getall")]
         public IActionResult GetAll()
         {
             IDataResult<List<CarImage>> result = _carImageService.GetAll();
@@ -44,9 +44,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getbyid")]
-        public IActionResult GetById([FromForm(Name = ("Id"))] int Id)
+        public IActionResult GetById([FromForm(Name = ("Id"))] int id)
         {
-            var result = _carImageService.Get(Id, "Araba Resmi");
+            var result = _carImageService.Get(id, "Araba Resmi");
             if (result.Success)
             {
                 return Ok(result);
@@ -54,10 +54,10 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
         [HttpPost("add")]
-        public IActionResult Add([FromForm] FileAddUpload fileUpload)
+        public IActionResult Add([FromForm(Name = ("Image"))] IFormFile image, [FromForm(Name = ("Car"))] string car)
         {
-            CarImage carImage = JsonConvert.DeserializeObject<CarImage>(fileUpload.carImage);
-            var result = _carImageService.AddImage(carImage, fileUpload.fileImage);
+            CarImage carImage = JsonConvert.DeserializeObject<CarImage>(car);
+            var result = _carImageService.AddImage(carImage, image);
             if (result.Success)
             {
                 return Ok(result);
@@ -66,12 +66,10 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("delete")]
-        public IActionResult Delete([FromForm(Name = ("Id"))] int Id)
+        public IActionResult Delete([FromForm(Name = ("Id"))] int id)
         {
 
-            var carImage = _carImageService.Get(Id, "Araba Resmi").Data;
-
-            var result = _carImageService.Delete(carImage);
+            var result = _carImageService.DeleteImage(id);
             if (result.Success)
             {
                 return Ok(result);
@@ -80,26 +78,16 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("update")]
-        public IActionResult Update([FromForm] FileUpdateUpload fileUpdateUpload)
+        public IActionResult Update([FromForm(Name = ("Image"))] IFormFile fileImage, [FromForm(Name = ("Id"))] int id)
         {
-            var carImage = _carImageService.Get(fileUpdateUpload.Id, "Araba Resmi").Data;
+            var carImage = _carImageService.Get(id, "Araba Resmi").Data;
 
-            var result = _carImageService.UpdateImage(carImage, fileUpdateUpload.fileImage);
+            var result = _carImageService.UpdateImage(carImage, fileImage);
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result);
         }
-    }
-    public class FileAddUpload
-    {
-        public string carImage { get; set; }
-        public IFormFile fileImage { get; set; }
-    }
-    public class FileUpdateUpload
-    {
-        public int Id { get; set; }
-        public IFormFile fileImage { get; set; }
     }
 }
