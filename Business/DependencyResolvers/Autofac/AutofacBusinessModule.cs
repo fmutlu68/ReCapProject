@@ -33,6 +33,9 @@ namespace Business.DependencyResolvers.Autofac
             // Rental
             builder.RegisterType<RentalManager<EfRentalDal>>().As<IRentalService>();
             builder.RegisterType<EfRentalDal>().As<IRentalDal>();
+            // Car Image
+            builder.RegisterType<CarImageManager<EfCarImageDal>>().As<ICarImageService>();
+            builder.RegisterType<EfCarImageDal>().As<ICarImageDal>();
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
             builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces().EnableInterfaceInterceptors(new Castle.DynamicProxy.ProxyGenerationOptions()

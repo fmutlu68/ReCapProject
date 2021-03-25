@@ -27,7 +27,6 @@ namespace Business.Concrete
             this.dal = new TDal();
         }
 
-        [ValidationAspect(typeof(CarValidator))]
         public override IResult Add(Car entity)
         {
             var result = ValidationTool.Validate(new CarValidator(),entity);
@@ -69,7 +68,6 @@ namespace Business.Concrete
                 return new ErrorDataResult<List<Car>>(Messages.GetEntityListedError(err.Message));
             }
         }
-
         public override IResult Update(Car entity)
         {
             var result = ValidationTool.Validate(new CarValidator(), entity);
