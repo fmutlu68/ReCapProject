@@ -8,6 +8,8 @@ namespace Core.Constants
     public static class Messages
     {
         public static string GetEntityListedSuccess => "Listeleme İşlemi Başarılı";
+        public static string GetAuthRegisteredSuccess => "Kullanıcı Kaydolma İşlemi Başarılı.";
+        public static string GetAccessTokenCreatedSuccess => "Access Token Oluşturulma İşlemi Başarılı.";
         public static string GetEntityListedError(string errorMessage)
         {
             return string.Format("Listeleme İşlemi Sırasında Bir Hata Oluştu: {0}", errorMessage);

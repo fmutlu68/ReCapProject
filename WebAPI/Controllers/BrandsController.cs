@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,6 +22,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getall")]
+        [Authorize()]
         public IActionResult GetAll()
         {
             var result = _brandService.GetAll();
@@ -32,6 +34,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("add")]
+        [Authorize()]
         public IActionResult Add(Brand brand)
         {
             var result = _brandService.Add(brand);
@@ -43,6 +46,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("delete")]
+        [Authorize()]
         public IActionResult Delete(Brand brand)
         {
             var result = _brandService.Delete(brand);
@@ -54,6 +58,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("update")]
+        [Authorize()]
         public IActionResult Update(Brand brand)
         {
             var result = _brandService.Update(brand);
@@ -65,6 +70,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getbyid")]
+        [Authorize()]
         public IActionResult GetById(int id)
         {
             var result = _brandService.Get(id, "Marka");

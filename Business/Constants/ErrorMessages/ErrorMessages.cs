@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Entities.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -41,5 +42,10 @@ namespace Business.Constants.ErrorMessages
         public static string GetMinLengthLastNameError => "Girilen Soyisim En Az İki Karakterden Oluşmalıdır.";
         public static string GetEmptyPasswordError => "Bir Şifre Girilmelidir.";
         public static string GetMinLengthPasswordError => "Girilen Şifre En Az 8 Karakter Olmalıdır.";
+
+        // Auth
+        public static string GetAuthNotFoundEmailError => "Girilen Emaile Ait Bir Hesap Bulunamadı.";
+        public static string GetAuthPasswordError => "Parola Hatalı.";
+        public static string GetAuthEmailAlreadyExist => "Bu Kullanıcı Sistemde Zaten Mevcut.";
     }
 }

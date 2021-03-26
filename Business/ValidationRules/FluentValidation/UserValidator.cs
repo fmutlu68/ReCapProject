@@ -1,7 +1,7 @@
 ﻿using Business.Constants.ErrorCodes;
 using Business.Constants.ErrorMessages;
 using Business.Constants.PropertyNames;
-using Entities.Concrete;
+using Core.Entities.Concrete;
 using FluentValidation;
 
 namespace Business.ValidationRules.FluentValidation
@@ -40,16 +40,16 @@ namespace Business.ValidationRules.FluentValidation
                 .WithErrorCode(ErrorCodes.GetInsufficientLengthErrorCode)
                 .OverridePropertyName(PropertyNames.GetUserLastNameFieldName)
                 .WithMessage(ErrorMessages.GetMinLengthLastNameError);
-            RuleFor(user => user.Password)
-                .NotEmpty()
-                .WithErrorCode(ErrorCodes.GetEmptyFieldErrorCode)
-                .OverridePropertyName(PropertyNames.GetUserPasswordFieldName)
-                .WithMessage(ErrorMessages.GetEmptyPasswordError);
-            RuleFor(user => user.Password)
-                .MinimumLength(8)
-                .WithErrorCode(ErrorCodes.GetInsufficientLengthErrorCode)
-                .OverridePropertyName(PropertyNames.GetUserPasswordFieldName)
-                .WithMessage(ErrorMessages.GetMinLengthPasswordError);
+            //RuleFor(user => user.Password)
+            //    .NotEmpty()
+            ////    .WithErrorCode(ErrorCodes.GetEmptyFieldErrorCode)
+            //    .OverridePropertyName(PropertyNames.GetUserPasswordFieldName)
+            //    .WithMessage(ErrorMessages.GetEmptyPasswordError);
+            //RuleFor(user => user.Password)
+            //    .MinimumLength(8)
+            //    .WithErrorCode(ErrorCodes.GetInsufficientLengthErrorCode)
+            //    .OverridePropertyName(PropertyNames.GetUserPasswordFieldName)
+            //    .WithMessage(ErrorMessages.GetMinLengthPasswordError);
         }
 
     }

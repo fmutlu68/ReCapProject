@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,6 +22,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getall")]
+        [Authorize()]
         public IActionResult GetAll()
         {
             var result = _customerService.GetAll();
@@ -32,6 +34,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("add")]
+        [Authorize()]
         public IActionResult Add(Customer customer)
         {
             var result = _customerService.Add(customer);
@@ -43,6 +46,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("delete")]
+        [Authorize()]
         public IActionResult Delete(Customer customer)
         {
             var result = _customerService.Delete(customer);
@@ -54,6 +58,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("update")]
+        [Authorize()]
         public IActionResult Update(Customer customer)
         {
             var result = _customerService.Update(customer);
@@ -65,6 +70,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getbyid")]
+        [Authorize()]
         public IActionResult GetById(int id)
         {
             var result = _customerService.Get(id, "Müşteri");
