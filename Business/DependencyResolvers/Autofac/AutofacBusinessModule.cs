@@ -17,25 +17,25 @@ namespace Business.DependencyResolvers.Autofac
         protected override void Load(ContainerBuilder builder)
         {
             // Car
-            builder.RegisterType<CarManager<EfCarDal, EfCarDal>>().As<ICarService>();
+            builder.RegisterType<CarManager>().As<ICarService>();
             builder.RegisterType<EfCarDal>().As<ICarDal>();
             // Color
-            builder.RegisterType<ColorManager<EfColorDal>>().As<IColorService>();
+            builder.RegisterType<ColorManager>().As<IColorService>();
             builder.RegisterType<EfColorDal>().As<IColorDal>();
             // Brand
-            builder.RegisterType<BrandManager<EfBrandDal>>().As<IBrandService>();
+            builder.RegisterType<BrandManager>().As<IBrandService>();
             builder.RegisterType<EfBrandDal>().As<IBrandDal>();
             // User
-            builder.RegisterType<UserManager<EfUserDal>>().As<IUserService>();
+            builder.RegisterType<UserManager>().As<IUserService>();
             builder.RegisterType<EfUserDal>().As<IUserDal>();
             // Customer
-            builder.RegisterType<CustomerManager<EfCustomerDal>>().As<ICustomerService>();
+            builder.RegisterType<CustomerManager>().As<ICustomerService>();
             builder.RegisterType<EfCustomerDal>().As<ICustomerDal>();
             // Rental
-            builder.RegisterType<RentalManager<EfRentalDal>>().As<IRentalService>();
+            builder.RegisterType<RentalManager>().As<IRentalService>();
             builder.RegisterType<EfRentalDal>().As<IRentalDal>();
             // Car Image
-            builder.RegisterType<CarImageManager<EfCarImageDal>>().As<ICarImageService>();
+            builder.RegisterType<CarImageManager>().As<ICarImageService>();
             builder.RegisterType<EfCarImageDal>().As<ICarImageDal>();
             // Auth
             builder.RegisterType<AuthManager>().As<IAuthService>();

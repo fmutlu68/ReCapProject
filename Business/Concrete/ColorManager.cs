@@ -1,28 +1,64 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.ValidationRules.FluentValidation;
-using Core.Business.EntityFrameworkBusiness;
-using Core.CrossCuttingConcerns.Validation;
-using Core.Entities;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Validation;
+using Core.Constants;
 using Core.Utilities.Results;
+using DataAccess.Abstract;
 using Entities.Concrete;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Business.Concrete
 {
-    public class ColorManager<TDal> : EfBusinessServiceBase<Color,TDal>,IColorService
-        where TDal : class, IDal<Color>, new()
+    public class ColorManager : IColorService
     {
-        public override IResult Add(Color entity)
+        IColorDal _colorDal;
+
+        public ColorManager(IColorDal colorDal)
         {
-            var result = ValidationTool.Validate(new ColorValidator(), entity);
-            return result == null ? base.Add(entity) : result;
+            _colorDal = colorDal;
         }
-        public override IResult Update(Color entity)
+
+        [ValidationAspect(typeof(ColorValidator))]
+        [CacheRemoveAspect("IColorService.Get")]
+        [SecuredOperation("Admin,Color.add", "Result")]
+        public IResult Add(Color color)
         {
-            var result = ValidationTool.Validate(new ColorValidator(), entity);
-            return result == null ? base.Update(entity) : result;
+            _colorDal.Add(color);
+            return new SuccessResult(Messages.GetCRUDSuccess(_colorDal.GetAll().Count, "Renk", "Ekleme"));
+        }
+
+        [ValidationAspect(typeof(ColorValidator))]
+        [CacheRemoveAspect("IColorService.Get")]
+        [SecuredOperation("Admin,Color.delete", "Result")]
+        public IResult Delete(Color color)
+        {
+            _colorDal.Delete(color);
+            return new SuccessResult(Messages.GetCRUDSuccess(_colorDal.GetAll().Count, "Renk", "Silme"));
+        }
+
+        [CacheAspect]
+        [SecuredOperation("Admin,Color.list","DataResult", "ListColor")]
+        public IDataResult<List<Color>> GetAll()
+        {
+            return new SuccessDataResult<List<Color>>(Messages.GetEntityListedSuccess,_colorDal.GetAll());
+        }
+
+        [CacheAspect]
+        [SecuredOperation("Admin,Color.getbyid", "DataResult", "Color")]
+        public IDataResult<Color> GetById(int id)
+        {
+            return new SuccessDataResult<Color>(Messages.GetEntityListedSuccess, _colorDal.Get(c=>c.Id == id));
+        }
+
+        [ValidationAspect(typeof(ColorValidator))]
+        [CacheRemoveAspect("IColorService.Get")]
+        [SecuredOperation("Admin,Color.update", "Result")]
+        public IResult Update(Color color)
+        {
+            _colorDal.Update(color);
+            return new SuccessResult(Messages.GetCRUDSuccess(_colorDal.GetAll().Count, "Renk", "Güncelleme"));
         }
     }
 }

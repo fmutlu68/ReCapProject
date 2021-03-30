@@ -1,12 +1,6 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
@@ -22,7 +16,6 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getall")]
-        [Authorize()]
         public IActionResult GetAll()
         {
             var result = _colorService.GetAll();
@@ -34,7 +27,6 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("add")]
-        [Authorize()]
         public IActionResult Add(Color color)
         {
             var result = _colorService.Add(color);
@@ -46,7 +38,6 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("delete")]
-        [Authorize()]
         public IActionResult Delete(Color color)
         {
             var result = _colorService.Delete(color);
@@ -58,7 +49,6 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("update")]
-        [Authorize()]
         public IActionResult Update(Color color)
         {
             var result = _colorService.Update(color);
@@ -70,10 +60,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getbyid")]
-        [Authorize()]
         public IActionResult GetById(int id)
         {
-            var result = _colorService.Get(id, "Renk");
+            var result = _colorService.GetById(id);
             if (result.Success)
             {
                 return Ok(result);

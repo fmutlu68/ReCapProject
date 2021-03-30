@@ -1,28 +1,64 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.ValidationRules.FluentValidation;
-using Core.Business.EntityFrameworkBusiness;
-using Core.CrossCuttingConcerns.Validation;
-using Core.Entities;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Validation;
+using Core.Constants;
 using Core.Utilities.Results;
+using DataAccess.Abstract;
 using Entities.Concrete;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Business.Concrete
 {
-    public class RentalManager<TDal> : EfBusinessServiceBase<Rental, TDal>,IRentalService
-        where TDal : class, IDal<Rental>, new()
+    public class RentalManager : IRentalService
     {
-        public override IResult Add(Rental entity)
+        IRentalDal _rentalDal;
+
+        public RentalManager(IRentalDal rentalDal)
         {
-            var result = ValidationTool.Validate(new RentalValidator(), entity);
-            return result == null ? base.Add(entity) : result;
+            _rentalDal = rentalDal;
         }
-        public override IResult Update(Rental entity)
+
+        [ValidationAspect(typeof(RentalValidator))]
+        [CacheRemoveAspect("IRentalService.Get")]
+        [SecuredOperation("admin,Rental.add","Result")]
+        public IResult Add(Rental rental)
         {
-            var result = ValidationTool.Validate(new RentalValidator(), entity);
-            return result == null ? base.Update(entity) : result;
+            _rentalDal.Add(rental);
+            return new SuccessResult(Messages.GetCRUDSuccess(_rentalDal.GetAll().Count,"Kiralama","Ekleme"));
+        }
+
+        [ValidationAspect(typeof(RentalValidator))]
+        [CacheRemoveAspect("IRentalService.Get")]
+        [SecuredOperation("admin,Rental.delete", "Result")]
+        public IResult Delete(Rental rental)
+        {
+            _rentalDal.Delete(rental);
+            return new SuccessResult(Messages.GetCRUDSuccess(_rentalDal.GetAll().Count, "Kiralama", "Silme"));
+        }
+
+        [CacheAspect]
+        [SecuredOperation("admin,Rental.list", "DataResult", "ListRental")]
+        public IDataResult<List<Rental>> GetAll()
+        {
+            return new SuccessDataResult<List<Rental>>(Messages.GetEntityListedSuccess,_rentalDal.GetAll());
+        }
+
+        [CacheAspect]
+        [SecuredOperation("admin,Rental.getbyid", "DataResult", "Rental")]
+        public IDataResult<Rental> GetById(int id)
+        {
+            return new SuccessDataResult<Rental>(Messages.GetEntitySuccess("Kiralama"), _rentalDal.Get(r=>r.Id == id));
+        }
+
+        [ValidationAspect(typeof(RentalValidator))]
+        [CacheRemoveAspect("IRentalService.Get")]
+        [SecuredOperation("admin,Rental.update", "Result")]
+        public IResult Update(Rental rental)
+        {
+            _rentalDal.Update(rental);
+            return new SuccessResult(Messages.GetCRUDSuccess(_rentalDal.GetAll().Count, "Kiralama", "Güncelleme"));
         }
     }
 }

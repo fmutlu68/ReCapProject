@@ -1,12 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
 using Entities.Concrete;
 using Business.Abstract;
-using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Controllers
 {
@@ -22,7 +16,6 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getall")]
-        [Authorize()]
         public IActionResult GetAll()
         {
             var result = _rentalService.GetAll();
@@ -34,7 +27,6 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("add")]
-        [Authorize()]
         public IActionResult Add(Rental rental)
         {
             var result = _rentalService.Add(rental);
@@ -46,7 +38,6 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("delete")]
-        [Authorize()]
         public IActionResult Delete(Rental rental)
         {
             var result = _rentalService.Delete(rental);
@@ -58,7 +49,6 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("update")]
-        [Authorize()]
         public IActionResult Update(Rental rental)
         {
             var result = _rentalService.Update(rental);
@@ -70,10 +60,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getbyid")]
-        [Authorize()]
         public IActionResult GetById(int id)
         {
-            var result = _rentalService.Get(id, "Kiralama");
+            var result = _rentalService.GetById(id);
             if (result.Success)
             {
                 return Ok(result);

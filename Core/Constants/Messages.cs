@@ -16,7 +16,7 @@ namespace Core.Constants
         }
         public static string GetEntitySuccess(string entityMessage)
         {
-            return string.Format("Numarasına Göre {0} Getirme İşlemi Başarılı.", entityMessage);
+            return string.Format("Seçili {0} Getirme İşlemi Başarılı.", entityMessage);
         }
         public static string GetCRUDSuccess (int count, string entityName, string operationName)
         {

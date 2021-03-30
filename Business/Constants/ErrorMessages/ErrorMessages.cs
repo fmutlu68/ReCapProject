@@ -47,5 +47,8 @@ namespace Business.Constants.ErrorMessages
         public static string GetAuthNotFoundEmailError => "Girilen Emaile Ait Bir Hesap Bulunamadı.";
         public static string GetAuthPasswordError => "Parola Hatalı.";
         public static string GetAuthEmailAlreadyExist => "Bu Kullanıcı Sistemde Zaten Mevcut.";
+
+        // Secured Operation
+        public static string GetSecuredOperationNotAuthorizedError => "Yetkiniz Yok.";
     }
 }

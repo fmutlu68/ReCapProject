@@ -1,34 +1,58 @@
 ﻿using Business.Abstract;
 using Business.ValidationRules.FluentValidation;
-using Core.Business.EntityFrameworkBusiness;
-using Core.CrossCuttingConcerns.Validation;
-using Core.Entities;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Core.Entities.Concrete;
 using System.Collections.Generic;
+using Core.Aspects.Autofac.Validation;
+using Core.Aspects.Autofac.Caching;
+using Business.BusinessAspects.Autofac;
+using Core.Constants;
 
 namespace Business.Concrete
 {
-    public class UserManager<TDal> : EfBusinessServiceBase<User, TDal>, IUserService
-        where TDal : class, IDal<User>,IUserDal, new()
+    public class UserManager : IUserService
     {
-        TDal _userDal;
+        IUserDal _userDal;
 
-        public UserManager()
+        public UserManager(IUserDal userDal)
         {
-            _userDal = new TDal();
+            _userDal = userDal;
         }
 
-        public override IResult Add(User entity)
+        [ValidationAspect(typeof(CustomerValidator))]
+        [CacheRemoveAspect("IUserService.Get")]
+        public IResult Add(User user)
         {
-            var result = ValidationTool.Validate(new UserValidator(), entity);
-            return result == null ? base.Add(entity) : result;
+            _userDal.Add(user);
+            return new SuccessResult(Messages.GetCRUDSuccess(_userDal.GetAll().Count,"Kullanıcı","Ekleme"));
+        }
+
+        [ValidationAspect(typeof(CustomerValidator))]
+        [CacheRemoveAspect("IUserService.Get")]
+        public IResult Delete(User user)
+        {
+            _userDal.Delete(user);
+            return new SuccessResult(Messages.GetCRUDSuccess(_userDal.GetAll().Count, "Kullanıcı", "Silme"));
+        }
+
+        [CacheAspect]
+        [SecuredOperation("Admin,User.list", "DataResult", "ListUser")]
+        public IDataResult<List<User>> GetAll()
+        {
+            return new SuccessDataResult<List<User>>(Messages.GetEntityListedSuccess,_userDal.GetAll());
+        }
+
+        [CacheAspect]
+        [SecuredOperation("Admin,User.getbyid", "DataResult", "User")]
+        public IDataResult<User> GetById(int id)
+        {
+            return new SuccessDataResult<User>(Messages.GetEntitySuccess("Kullanıcı"), _userDal.Get(u=>u.Id == id));
         }
 
         public IDataResult<User> GetByMail(string email)
         {
-            User gotUser = base.service.Get(user => user.Email == email);
+            User gotUser = _userDal.Get(user => user.Email == email);
             if (gotUser != null)
             {
                 return new SuccessDataResult<User>(gotUser);
@@ -42,10 +66,12 @@ namespace Business.Concrete
             return new SuccessDataResult<List<OperationClaim>>(gotClaims);
         }
 
-        public override IResult Update(User entity)
+        [ValidationAspect(typeof(CustomerValidator))]
+        [CacheRemoveAspect("IUserService.Get")]
+        public IResult Update(User user)
         {
-            var result = ValidationTool.Validate(new UserValidator(), entity);
-            return result == null ? base.Update(entity) : result;
+            _userDal.Update(user);
+            return new SuccessResult(Messages.GetCRUDSuccess(_userDal.GetAll().Count, "Kullanıcı", "Güncelleme"));
         }
     }
 }
