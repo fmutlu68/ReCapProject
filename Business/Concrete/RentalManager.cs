@@ -7,6 +7,7 @@ using Core.Constants;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.Dtos;
 using System.Collections.Generic;
 
 namespace Business.Concrete
@@ -39,14 +40,20 @@ namespace Business.Concrete
         }
 
         [CacheAspect]
-        [SecuredOperation("admin,Rental.list", "DataResult", "ListRental")]
+        //[SecuredOperation("admin,Rental.list", "DataResult", "ListRental")]
         public IDataResult<List<Rental>> GetAll()
         {
             return new SuccessDataResult<List<Rental>>(Messages.GetEntityListedSuccess,_rentalDal.GetAll());
         }
 
         [CacheAspect]
-        [SecuredOperation("admin,Rental.getbyid", "DataResult", "Rental")]
+        public IDataResult<List<RentalDetailDto>> GetAllDetails()
+        {
+            return new SuccessDataResult<List<RentalDetailDto>>(Messages.GetEntityListedSuccess, _rentalDal.GetRentalDetails());
+        }
+
+        [CacheAspect]
+        //[SecuredOperation("admin,Rental.getbyid", "DataResult", "Rental")]
         public IDataResult<Rental> GetById(int id)
         {
             return new SuccessDataResult<Rental>(Messages.GetEntitySuccess("Kiralama"), _rentalDal.Get(r=>r.Id == id));

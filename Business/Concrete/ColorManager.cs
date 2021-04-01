@@ -39,14 +39,14 @@ namespace Business.Concrete
         }
 
         [CacheAspect]
-        [SecuredOperation("Admin,Color.list","DataResult", "ListColor")]
+        //[SecuredOperation("Admin,Color.list","DataResult", "ListColor")]
         public IDataResult<List<Color>> GetAll()
         {
             return new SuccessDataResult<List<Color>>(Messages.GetEntityListedSuccess,_colorDal.GetAll());
         }
 
         [CacheAspect]
-        [SecuredOperation("Admin,Color.getbyid", "DataResult", "Color")]
+        //[SecuredOperation("Admin,Color.getbyid", "DataResult", "Color")]
         public IDataResult<Color> GetById(int id)
         {
             return new SuccessDataResult<Color>(Messages.GetEntityListedSuccess, _colorDal.Get(c=>c.Id == id));

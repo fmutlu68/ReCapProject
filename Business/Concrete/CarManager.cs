@@ -31,7 +31,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.GetCRUDSuccess(_carDal.GetAll().Count,"Araba","Ekleme"));
         }
 
-        [SecuredOperation("Admin,Car.listdetails", "DataResult", "ListCar")]
+        //[SecuredOperation("Admin,Car.listdetails", "DataResult", "ListCar")]
         [CacheAspect]
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
@@ -45,7 +45,7 @@ namespace Business.Concrete
             }
         }
 
-        [SecuredOperation("Admin,Car.listbybrand", "DataResult", "ListCar")]
+        //[SecuredOperation("Admin,Car.listbybrand", "DataResult", "ListCar")]
         [CacheAspect]
         public IDataResult<List<Car>> GetCarsByBrandId(int brandId)
         {
@@ -59,7 +59,7 @@ namespace Business.Concrete
             }
         }
 
-        [SecuredOperation("Admin,Car.listbycolor", "DataResult", "ListCar")]
+        //[SecuredOperation("Admin,Car.listbycolor", "DataResult", "ListCar")]
         [CacheAspect]
         public IDataResult<List<Car>> GetCarsByColorId(int colorId)
         {
@@ -82,7 +82,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.GetCRUDSuccess(_carDal.GetAll().Count, "Araba", "Güncelleme"));
         }
 
-        [SecuredOperation("Admin,Car.list", "DataResult", "ListCar")]
+        //[SecuredOperation("Admin,Car.list", "DataResult", "ListCar")]
         [CacheAspect]
         public IDataResult<List<Car>> GetAll()
         {
@@ -99,7 +99,7 @@ namespace Business.Concrete
         }
 
         [CacheAspect]
-        [SecuredOperation("Admin,Car.getbyid", "DataResult", "Car")]
+        //[SecuredOperation("Admin,Car.getbyid", "DataResult", "Car")]
         public IDataResult<Car> GetById(int id)
         {
             return new SuccessDataResult<Car>(Messages.GetEntitySuccess("Arabayı"),_carDal.Get(c=>c.Id == id));

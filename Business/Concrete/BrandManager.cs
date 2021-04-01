@@ -38,7 +38,7 @@ namespace Business.Concrete
         }
 
         [CacheAspect]
-        [SecuredOperation("Admin,Brand.list", "DataResult","ListBrand")]
+        //[SecuredOperation("Admin,Brand.list", "DataResult","ListBrand")]
         public IDataResult<List<Brand>> GetAll()
         {
             return new SuccessDataResult<List<Brand>>(Messages.GetEntityListedSuccess,_brandDal.GetAll());
@@ -46,7 +46,7 @@ namespace Business.Concrete
 
 
         [CacheAspect]
-        [SecuredOperation("Admin,Brand.getbyid", "DataResult", "Brand")]
+        //[SecuredOperation("Admin,Brand.getbyid", "DataResult", "Brand")]
         public IDataResult<Brand> GetById(int id)
         {
             return new SuccessDataResult<Brand>(Messages.GetEntitySuccess("Markayı"),_brandDal.Get(b=>b.Id == id));

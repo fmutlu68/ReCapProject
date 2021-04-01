@@ -26,7 +26,7 @@ namespace Business.Concrete
         }
 
         [CacheAspect]
-        [SecuredOperation("Admin,CarImage.listbycarid", "DataResult", "ListCarImage")]
+        //[SecuredOperation("Admin,CarImage.listbycarid", "DataResult", "ListCarImage")]
         public IDataResult<List<CarImage>> GetAllImagesByCarId(int carId)
         {
             return new SuccessDataResult<List<CarImage>>(Messages.GetEntityListedSuccess, _carImageDal.GetAll(c => c.CarId == carId));
@@ -109,14 +109,14 @@ namespace Business.Concrete
         }
 
         [CacheAspect]
-        [SecuredOperation("Admin,CarImage.list", "DataResult", "ListCarImage")]
+        //[SecuredOperation("Admin,CarImage.list", "DataResult", "ListCarImage")]
         public IDataResult<List<CarImage>> GetAll()
         {
             return new SuccessDataResult<List<CarImage>>(Messages.GetEntityListedSuccess,_carImageDal.GetAll());
         }
 
         [CacheAspect]
-        [SecuredOperation("Admin,CarImage.getbyid", "DataResult", "CarImage")]
+        //[SecuredOperation("Admin,CarImage.getbyid", "DataResult", "CarImage")]
         public IDataResult<CarImage> GetById(int id)
         {
             return new SuccessDataResult<CarImage>(Messages.GetEntitySuccess("Araba Resimi"),_carImageDal.Get(img=>img.Id == id));

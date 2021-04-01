@@ -39,14 +39,14 @@ namespace Business.Concrete
         }
 
         [CacheAspect]
-        [SecuredOperation("Admin,Customer.list", "DataResult", "ListCustomer")]
+        //[SecuredOperation("Admin,Customer.list", "DataResult", "ListCustomer")]
         public IDataResult<List<Customer>> GetAll()
         {
             return new SuccessDataResult<List<Customer>>(Messages.GetEntityListedSuccess,_customerDal.GetAll());
         }
 
         [CacheAspect]
-        [SecuredOperation("Admin,Customer.getbyid", "DataResult", "Customer")]
+        //[SecuredOperation("Admin,Customer.getbyid", "DataResult", "Customer")]
         public IDataResult<Customer> GetById(int id)
         {
             return new SuccessDataResult<Customer>(Messages.GetEntitySuccess("Müşteri"), _customerDal.Get(c=>c.Id == id));
