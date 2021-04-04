@@ -50,5 +50,8 @@ namespace Business.Constants.ErrorMessages
 
         // Secured Operation
         public static string GetSecuredOperationNotAuthorizedError => "Yetkiniz Yok.";
+
+        // Car Detail
+        public static string GetDoesntExistsAnyImageError => "Herhangi Bir Araba Resmi Bulunamadı.";
     }
 }

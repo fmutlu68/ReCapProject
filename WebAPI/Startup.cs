@@ -67,7 +67,7 @@ namespace WebAPI
 
             app.UseRouting();
 
-            //app.UseCors(builder=>builder.WithOrigins("http://localhost:3000").AllowAnyOrigin());
+            app.UseStaticFiles();
 
             app.UseAuthentication();
 

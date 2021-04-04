@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
 using Business.BusinessAspects.Autofac;
+using Business.Constants.ErrorCodes;
+using Business.Constants.ErrorMessages;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
@@ -103,6 +105,26 @@ namespace Business.Concrete
         public IDataResult<Car> GetById(int id)
         {
             return new SuccessDataResult<Car>(Messages.GetEntitySuccess("Arabayı"),_carDal.Get(c=>c.Id == id));
+        }
+
+        [CacheAspect]
+        public IDataResult<List<CarDetailDto>> GetCarDetailsByColor(int colorId)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(Messages.GetEntityListedSuccess,_carDal.GetCarDetails(c=>c.ColorId == colorId));
+        }
+        public IDataResult<List<CarDetailDto>> GetCarDetailsByBrand(int brandId)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(Messages.GetEntityListedSuccess, _carDal.GetCarDetails(c=>c.BrandId == brandId));
+        }
+
+        public IDataResult<CarDetailDto> GetCarDetailById(int carId)
+        {
+            var data = _carDal.GetCarDetail(c => c.CarId == carId);
+            //if (data.ImageList == null || data.ImageList.Count == 0)
+            //{
+            //    return new SuccessDataResult<CarDetailDto>($" {ErrorCodes.GetNotFoundErrorCode}-{ErrorMessages.GetDoesntExistsAnyImageError}",data);
+            //}
+            return new SuccessDataResult<CarDetailDto>(Messages.GetEntitySuccess("Araba Resmi"), data);
         }
     }
 }

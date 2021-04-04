@@ -72,11 +72,11 @@ namespace Core.Utilities.Helpers
             var newPath = Guid.NewGuid() + fileExtension;
 
 
-            string path = Environment.CurrentDirectory + @"\wwwroot\Uploads\Images";
+            string path = Environment.CurrentDirectory + @"\wwwroot\images";
 
             string result = $@"{path}\{newPath}";
 
-            return (result, $"\\Uploads\\Images\\{newPath}");
+            return (result, $"\\images\\{newPath}");
         }
     }
 }
