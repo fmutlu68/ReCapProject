@@ -21,7 +21,7 @@ namespace Business.Concrete
         }
         [ValidationAspect(typeof(BrandValidator))]
         [CacheRemoveAspect("IBrandService.Get")]
-        [SecuredOperation("Admin,Brand.add", "Result")]
+        //[SecuredOperation("Admin,Brand.add", "Result")]
         public IResult Add(Brand entity)
         {
             _brandDal.Add(entity);
@@ -30,7 +30,7 @@ namespace Business.Concrete
 
         [ValidationAspect(typeof(BrandValidator))]
         [CacheRemoveAspect("IBrandService.Get")]
-        [SecuredOperation("Admin,Brand.delete", "Result")]
+        //[SecuredOperation("Admin,Brand.delete", "Result")]
         public IResult Delete(Brand brand)
         {
             _brandDal.Delete(brand);

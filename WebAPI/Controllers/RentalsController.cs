@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Entities.Concrete;
 using Business.Abstract;
+using Entities.Dtos;
 
 namespace WebAPI.Controllers
 {
@@ -26,10 +27,10 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("add")]
-        public IActionResult Add(Rental rental)
+        [HttpPost("rentacar")]
+        public IActionResult RentACar(RentalRentDto rentalDto)
         {
-            var result = _rentalService.Add(rental);
+            var result = _rentalService.RentACar(rentalDto);
             if (result.Success)
             {
                 return Ok(result);

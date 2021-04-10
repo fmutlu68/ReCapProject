@@ -32,6 +32,7 @@ namespace Business.Constants.ErrorMessages
         public static string GetEmptyCarIdError => "Bir Araba Seçilmelidir.";
         public static string GetEmptyRentDateError => "Bir Kiralama Tarihi Seçilmelidir/Girilmelidir.";
         public static string GetInvalidRentDateError => "Girilen/Seçilen Tarih Bugün'den Sonraki Bir Gün Olmalıdır.";
+        public static string GetAlreadyExistRentalOfSelectedCarError => "Kiralanmak İstenen Araba Şu An Kiradadır.";
 
         // User
         public static string GetEmptyEmailError => "Bir Email Girilmelidir.";
@@ -53,5 +54,8 @@ namespace Business.Constants.ErrorMessages
 
         // Car Detail
         public static string GetDoesntExistsAnyImageError => "Herhangi Bir Araba Resmi Bulunamadı.";
+
+        // Credit Cad
+        public static string GetNoPaymentFromCreditCardError => "Kredi Kartından Ödeme Yapılmadı.";
     }
 }

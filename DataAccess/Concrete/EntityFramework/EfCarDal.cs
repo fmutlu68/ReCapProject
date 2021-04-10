@@ -36,9 +36,24 @@ namespace DataAccess.Concrete.EntityFramework
                 CarDetailDto car = matchingCars.FirstOrDefault(filter);
                 if (car == null)
                 {
-                    return GetCarDetails().FirstOrDefault(filter.Compile());
+                    car = GetCarDetails().FirstOrDefault(filter.Compile());
                 }
-                car.ImageList = context.CarImages.ToList().Where(img=>img.CarId == car.CarId).Select(img=>img.ImagePath).ToList();
+                else
+                {
+                    car.ImageList = context.CarImages.ToList().Where(img => img.CarId == car.CarId).Select(img => img.ImagePath).ToList();
+                }
+                var allRentalsOfCurrentCar = context.Rentals.Where(r => r.CarId == car.CarId).ToList();
+                if (allRentalsOfCurrentCar.Count > 0)
+                {
+                    car.IsRentedNow = true;
+                }
+                foreach (Rental rental in allRentalsOfCurrentCar)
+                {
+                    if (rental.ReturnDate == DateTime.MinValue || rental.ReturnDate > DateTime.Now)
+                    {   
+                        car.IsRentedNow = true;
+                    }
+                }
                 return car;
             }
         }

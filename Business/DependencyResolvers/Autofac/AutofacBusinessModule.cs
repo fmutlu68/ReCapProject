@@ -40,6 +40,8 @@ namespace Business.DependencyResolvers.Autofac
             // Auth
             builder.RegisterType<AuthManager>().As<IAuthService>();
             builder.RegisterType<JwtHelper>().As<ITokenHelper>();
+            // Credit Card
+            builder.RegisterType<FakeCreditCardManager>().As<ICreditCardService>();
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
             builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces().EnableInterfaceInterceptors(new Castle.DynamicProxy.ProxyGenerationOptions()

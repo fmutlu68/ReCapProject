@@ -21,16 +21,16 @@ namespace Business.ValidationRules.FluentValidation
                 .WithErrorCode(ErrorCodes.GetEmptyFieldErrorCode)
                 .WithMessage(ErrorMessages.GetEmptyCustomerIdError)
                 .OverridePropertyName(PropertyNames.GetRentalCustomerIdFieldName);
-            RuleFor(rental=>rental.RentDate)
-                .NotEmpty()
-                .WithErrorCode(ErrorCodes.GetEmptyFieldErrorCode)
-                .WithMessage(ErrorMessages.GetEmptyRentDateError)
-                .OverridePropertyName(PropertyNames.GetRentalRentDateFieldName);
-            RuleFor(rental => rental.RentDate)
-                .GreaterThan(DateTime.Now)
-                .WithMessage(ErrorMessages.GetInvalidRentDateError)
-                .WithErrorCode(ErrorCodes.GetEmptyFieldErrorCode)
-                .OverridePropertyName(PropertyNames.GetRentalReturnDateFieldName);
+            //RuleFor(rental=>rental.RentDate)
+            //    .NotEmpty()
+            //    .WithErrorCode(ErrorCodes.GetEmptyFieldErrorCode)
+            //    .WithMessage(ErrorMessages.GetEmptyRentDateError)
+            //    .OverridePropertyName(PropertyNames.GetRentalRentDateFieldName);
+            //RuleFor(rental => rental.RentDate)
+            //    .GreaterThan(DateTime.Now)
+            //    .WithMessage(ErrorMessages.GetInvalidRentDateError)
+            //    .WithErrorCode(ErrorCodes.GetEmptyFieldErrorCode)
+            //    .OverridePropertyName(PropertyNames.GetRentalReturnDateFieldName);
 
         }
     }

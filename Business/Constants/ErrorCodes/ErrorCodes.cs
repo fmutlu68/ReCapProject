@@ -11,5 +11,6 @@ namespace Business.Constants.ErrorCodes
         public static string GetInvalidEmailErrorCode => "301";
         public static string GetNotFoundErrorCode => "404";
         public static string GetNotAuthorizedErrorCode => "405";
+        public static string GetAlreadyExistRentalOfSelectedCarErrorCode => "101";
     }
 }

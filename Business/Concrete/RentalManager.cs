@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
 using Business.BusinessAspects.Autofac;
+using Business.Constants.ErrorCodes;
+using Business.Constants.ErrorMessages;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
@@ -8,6 +10,7 @@ using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dtos;
+using System;
 using System.Collections.Generic;
 
 namespace Business.Concrete
@@ -15,19 +18,49 @@ namespace Business.Concrete
     public class RentalManager : IRentalService
     {
         IRentalDal _rentalDal;
+        ICreditCardService _creditCardService;
 
-        public RentalManager(IRentalDal rentalDal)
+        public RentalManager(IRentalDal rentalDal, ICreditCardService creditCardService)
         {
             _rentalDal = rentalDal;
+            _creditCardService = creditCardService;
         }
 
-        [ValidationAspect(typeof(RentalValidator))]
+        //[ValidationAspect(typeof(RentalValidator))]
         [CacheRemoveAspect("IRentalService.Get")]
-        [SecuredOperation("admin,Rental.add","Result")]
-        public IResult Add(Rental rental)
+        //[SecuredOperation("Admin,Rental.add","Result")]
+        public IResult RentACar(RentalRentDto rentalRentDto)
         {
-            _rentalDal.Add(rental);
-            return new SuccessResult(Messages.GetCRUDSuccess(_rentalDal.GetAll().Count,"Kiralama","Ekleme"));
+            if (CheckIfSelectedCarWasRented(rentalRentDto))
+            {
+                return new ErrorResult($"{ErrorCodes.GetAlreadyExistRentalOfSelectedCarErrorCode}  {ErrorMessages.GetAlreadyExistRentalOfSelectedCarError}");
+            }
+            else
+            {
+                if (_creditCardService.Pay(rentalRentDto.CurrentCreditCard,rentalRentDto.PaymentAmount) == 1)
+                {
+                    _rentalDal.Add(rentalRentDto.CurrentRental);
+                    return new SuccessResult(Messages.GetCRUDSuccess(_rentalDal.GetAll().Count, "Kiralama", "Kiralama"));
+                }
+                else
+                {
+                    return new ErrorResult(ErrorMessages.GetNoPaymentFromCreditCardError);
+                }
+            }
+            
+        }
+
+        private bool CheckIfSelectedCarWasRented(RentalRentDto selectedRental)
+        {
+            var rentals = _rentalDal.GetAll(r=>r.CarId == selectedRental.CurrentRental.CarId);
+            foreach (Rental rental in rentals)
+            {   
+                if (rental.ReturnDate.Date >= selectedRental.CurrentRental.RentDate.Date)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         [ValidationAspect(typeof(RentalValidator))]
@@ -40,7 +73,6 @@ namespace Business.Concrete
         }
 
         [CacheAspect]
-        //[SecuredOperation("admin,Rental.list", "DataResult", "ListRental")]
         public IDataResult<List<Rental>> GetAll()
         {
             return new SuccessDataResult<List<Rental>>(Messages.GetEntityListedSuccess,_rentalDal.GetAll());
@@ -53,7 +85,6 @@ namespace Business.Concrete
         }
 
         [CacheAspect]
-        //[SecuredOperation("admin,Rental.getbyid", "DataResult", "Rental")]
         public IDataResult<Rental> GetById(int id)
         {
             return new SuccessDataResult<Rental>(Messages.GetEntitySuccess("Kiralama"), _rentalDal.Get(r=>r.Id == id));
