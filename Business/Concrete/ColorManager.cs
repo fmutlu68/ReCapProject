@@ -54,7 +54,7 @@ namespace Business.Concrete
 
         [ValidationAspect(typeof(ColorValidator))]
         [CacheRemoveAspect("IColorService.Get")]
-        [SecuredOperation("Admin,Color.update", "Result")]
+        //[SecuredOperation("Admin,Color.update", "Result")]
         public IResult Update(Color color)
         {
             _colorDal.Update(color);

@@ -54,7 +54,7 @@ namespace Business.Concrete
 
         [ValidationAspect(typeof(BrandValidator))]
         [CacheRemoveAspect("IBrandService.Get")]
-        [SecuredOperation("Admin,Brand.update", "Result")]
+        //[SecuredOperation("Admin,Brand.update", "Result")]
         public IResult Update(Brand entity)
         {
             _brandDal.Update(entity);
